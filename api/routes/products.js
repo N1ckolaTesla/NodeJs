@@ -4,7 +4,7 @@ const router = express.Router()
 const Product = require('../models/product')
 
 router.get('/', (req, res, next) => {
-    Product.find()
+    Product.find() //находит все элементы
     .exec()
     .then(docs => {
         console.log(docs)
@@ -22,12 +22,12 @@ router.post('/', (req, res, next) => {
         name: req.body.name,
         price: req.body.price
     })
-    product.save() //сохраняет объект в базу данных
+    product
+    .save() //сохраняет объект в базу данных
     .then(result => {
-        console.log(result)
         res.status(201).json({
             message: 'Post Request Products',
-            createdProduct: result
+            createdProduct: product
         })
     })
     .catch(err => {
@@ -57,10 +57,11 @@ router.get('/:productId', (req, res, next) => {
 router.patch('/:productId', (req, res, next) => {
     const id = req.params.productId
     const updateOps = {}
+    console.log(req.body)
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value
     }
-    Product.update({_id: id}, {$set: updateOps})
+    Product.updateOne({_id: id}, {$set: updateOps})
     .exec()
     .then(result => {
         console.log(result)
@@ -76,10 +77,10 @@ router.patch('/:productId', (req, res, next) => {
 
 router.delete('/:productId', (req, res, next) => {
     const id = req.params.productId
-    Product.remove({_id: id})
+    Product.deleteOne({_id: id})
     .exec()
-    .then(res => {
-        res.status(200).json(res)
+    .then(result => {
+        res.status(200).json(result)
     })
     .catch(err => {
         console.log(err)

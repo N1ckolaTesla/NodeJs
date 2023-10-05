@@ -8,7 +8,10 @@ const mongoose = require('mongoose')
 const productsRoutes = require('./api/routes/products')
 const ordersRoutes = require('./api/routes/orders')
 
-mongoose.connect('mongodb://localhost:27017/')
+mongoose.connect(
+    'mongodb+srv://N1colaTesla:' + process.env.MONGO_ATLAS_PW + '@atlascluster.g5oscpc.mongodb.net/',
+    { useNewUrlParser: true, useUnifiedTopology: true }
+)
 
 //использует morgan для отображения процессов в терминале
 app.use(morgan('dev'))
