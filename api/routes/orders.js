@@ -8,6 +8,7 @@ router.get('/', (req, res, next) => {
     Order
     .find()
     .select('product quantity _id')
+    .populate('product')
     .exec()
     .then(docs => {
         res.status(200).json({
@@ -70,6 +71,7 @@ router.post('/', (req, res, next) => {
 router.get('/:orderId', (req, res, next) => {
     Order
     .findById(req.params.orderId)
+    .populate('product')
     .exec()
     .then(order => {
         if (!order) {
@@ -94,6 +96,7 @@ router.get('/:orderId', (req, res, next) => {
 
 router.delete('/:orderId', (req, res, next) => {
     Order
+    .findById(req.params.orderId)
     .deleteOne({_id: req.params.orderId})
     .exec()
     .then(result => {

@@ -5,8 +5,9 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
 //routes which should handle requests
-const productsRoutes = require('./api/routes/products')
-const ordersRoutes = require('./api/routes/orders')
+const productRoutes = require('./api/routes/products')
+const orderRoutes = require('./api/routes/orders')
+const userRoutes = require('./api/routes/user')
 
 mongoose.connect(
     'mongodb+srv://N1colaTesla:' + process.env.MONGO_ATLAS_PW + '@atlascluster.g5oscpc.mongodb.net/',
@@ -15,6 +16,7 @@ mongoose.connect(
 
 //использует morgan для отображения процессов в терминале
 app.use(morgan('dev'))
+app.use('/uploads', express.static('uploads'))//делаем роут uploads доступной для всех
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
@@ -32,8 +34,9 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/products', productsRoutes)
-app.use('/orders', ordersRoutes)
+app.use('/products', productRoutes)
+app.use('/orders', orderRoutes)
+app.use('/user', userRoutes)
 
 
 //этот middleware возвращает ошибку, когда пользователь переходит по несуществующему роуту
